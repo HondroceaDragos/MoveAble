@@ -9,5 +9,9 @@ public:
         const Vector2& momentum,
         const Sprite& sprite
     );
+
+    void setStyle(const double& newStyle);
+    const double& getStyle() const;
 private:
+    double _style;
 };

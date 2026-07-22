@@ -7,9 +7,9 @@
 
 /* I need to define these in terms of buffer.x */
 namespace universal {
-    constexpr double maximum_momentum = 90.0;
-    constexpr double friction = 120.0;
-    constexpr double elasticity = 1.75;
+    constexpr double maximum_momentum = 500.0;
+    constexpr double friction = 23.0;
+    constexpr double elasticity = 0.8;
 }
 
 class Engine {
@@ -21,7 +21,9 @@ private:
     double _dt;
 
     void _interpretInput(Player& p);
-    void _normalizeDirection(double& dx, double& dy);
+    void _normalizeDirection(Vector2& direction);
+    void _normalizeMomentum(Vector2& momentum);
     void _clampPlayer(Player& p, Buffer& b);
     void _carryMomentum(Player& p);
+    void _computeStyle(Player &p, Buffer& b);
 };

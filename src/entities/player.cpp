@@ -10,4 +10,9 @@ Player::Player(const Vector2& position, const Hitbox& hitbox,
         this->_velocity = velocity;
         this->_momentum = momentum;
         this->_sprite = sprite;
+        this->_style = 1.0;
     }
+
+void Player::setStyle(const double& newStyle) { _style = newStyle; }
+const double& Player::getStyle() const { return _style; };
+
