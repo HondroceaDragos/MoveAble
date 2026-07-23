@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./entity.hpp"
+#include "./style.hpp"
 
 class Player: public Entity {
 public:
@@ -10,8 +11,9 @@ public:
         const Sprite& sprite
     );
 
-    void setStyle(const double& newStyle);
-    const double& getStyle() const;
+    void setStyle(const bool& condition, const double& dt);
+    const Style& getStyle() const;
 private:
-    double _style;
+    Style _style;
+    double _timeSinceWallHit;
 };

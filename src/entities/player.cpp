@@ -10,9 +10,21 @@ Player::Player(const Vector2& position, const Hitbox& hitbox,
         this->_velocity = velocity;
         this->_momentum = momentum;
         this->_sprite = sprite;
-        this->_style = 1.0;
+
+        this->_style = Style();
+        this->_timeSinceWallHit = 0.0;
     }
 
-void Player::setStyle(const double& newStyle) { _style = newStyle; }
-const double& Player::getStyle() const { return _style; };
+void Player::setStyle(const bool& condition, const double& dt) {
+    if (condition) {
+        _timeSinceWallHit = 0.0;
+        _style.increasePoints(condition);
+    } else {
+        _timeSinceWallHit += dt;
+        _style.decreasePoints(_timeSinceWallHit >= points::decay_delay);
+    }
+}
 
+const Style& Player::getStyle() const {
+    return _style;
+}

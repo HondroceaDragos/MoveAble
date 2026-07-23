@@ -14,7 +14,7 @@ int main(void) {
     Player player = Player(
         (Vector2){bufferWidth / 2.0, bufferHeight / 2.0},
         (CircleHitbox){.center = (Vector2){bufferWidth / 2.0, bufferHeight / 2.0}, .radius = player_data / 32.0},
-        (Vector2){player_data / 4.0, player_data / 4.0},
+        (Vector2){player_data / 2.7, player_data / 2.7},
         (Vector2){0.0, 0.0},
         Sprite(LoadTexture("sprite.png"), 0.0, 0.3)
     );

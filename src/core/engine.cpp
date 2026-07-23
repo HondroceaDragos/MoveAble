@@ -13,11 +13,11 @@ void Engine::_normalizeDirection(Vector2& direction) {
     direction.y = dy;
 }
 
-void Engine::_normalizeMomentum(Vector2& momentum) {
+void Engine::_normalizeMomentum(Vector2& momentum, const double& cap) {
     auto [mx, my] = momentum;
     double norm = std::sqrt(mx * mx + my * my);
-    if (norm > universal::maximum_momentum) {
-        norm = universal::maximum_momentum / norm;
+    if (norm > cap) {
+        norm = cap / norm;
         mx *= norm;
         my *= norm;
     }
@@ -43,11 +43,14 @@ void Engine::_interpretInput(Player& p) {
 
     _normalizeDirection(direction);
 
-    mx += direction.x * vx * _dt;
-    my += direction.y * vy * _dt;
-    Vector2 momentum = {mx, my};
+    Vector2 addedMomentum = {direction.x * vx * _dt, direction.y * vy * _dt};
+    _normalizeMomentum(addedMomentum, universal::maximum_input_momentum);
 
-    _normalizeMomentum(momentum);
+    mx += addedMomentum.x;
+    my += addedMomentum.y;
+
+    Vector2 momentum = {mx, my};
+    _normalizeMomentum(momentum, universal::maximum_global_momentum);
 
     mx = momentum.x;
     my = momentum.y;
@@ -55,24 +58,29 @@ void Engine::_interpretInput(Player& p) {
     p.setMomentum((Vector2){mx, my});
 }
 
-void Engine::_computeStyle(Player &p, Buffer& b) {
+WallHit Engine::_checkWallCollision(Player& p, Buffer &b) {
     double dx = p.getPosition().x;
     double dy = p.getPosition().y;
 
-    auto [bx, by] = b.getDimensions();
-
     double pr = std::get<CircleHitbox>(p.getHitbox()).radius;
 
-    double ammount = 1.0;
-    if (!(dx + pr <= bx)) { ammount += 0.15; }
-    if (!(dx - pr >= 0))  { ammount += 0.15; }
-    if (!(dy - pr >= 0))  { ammount += 0.15; }
-    if (!(dy + pr <= by)) { ammount += 0.15; }
+    auto [bx, by] = b.getDimensions();
 
-    p.setStyle(ammount);
+    WallHit wh = WallHit();
+    
+    wh.registerHit("right", !(dx + pr <= bx));
+    wh.registerHit("left", !(dx - pr >= 0));
+    wh.registerHit("top", !(dy - pr >= 0));
+    wh.registerHit("bottom", !(dy + pr <= by));
+    
+    return wh;
 }
 
-void Engine::_clampPlayer(Player &p, Buffer &b) {
+void Engine::_computeStyle(Player &p, WallHit& wh) {
+    p.setStyle(wh.anyHits(), _dt);
+}
+
+void Engine::_clampPlayer(Player& p, Buffer& b, WallHit& wh) {
     double dx = p.getPosition().x;
     double dy = p.getPosition().y;
 
@@ -82,12 +90,12 @@ void Engine::_clampPlayer(Player &p, Buffer &b) {
 
     auto [bx, by] = b.getDimensions();
 
-    double style = p.getStyle();
+    double stylePts = p.getStyle().getPoints();
 
-    if (!(dx + pr <= bx)) { dx = bx - pr; mx = -mx * universal::elasticity; }
-    if (!(dx - pr >= 0))  { dx = 0 + pr; mx = -mx * universal::elasticity;  }
-    if (!(dy - pr >= 0))  { dy = 0 + pr; my = -my * universal::elasticity;  }
-    if (!(dy + pr <= by)) { dy = by - pr; my = -my * universal::elasticity; }
+    if (wh.inspectHit("right")) { dx = bx - pr; mx = -mx * universal::elasticity * stylePts; }
+    if (wh.inspectHit("left"))  { dx = 0 + pr; mx = -mx * universal::elasticity * stylePts;  }
+    if (wh.inspectHit("top"))  { dy = 0 + pr; my = -my * universal::elasticity * stylePts;  }
+    if (wh.inspectHit("bottom")) { dy = by - pr; my = -my * universal::elasticity * stylePts; }
 
     p.setPosition((Vector2){dx, dy});
     p.setMomentum((Vector2){mx, my});
@@ -111,6 +119,8 @@ void Engine::updatePlayer(Player& p, Buffer& b) {
     _dt = GetFrameTime();
     _interpretInput(p);
     _carryMomentum(p);
-    _computeStyle(p, b);
-    _clampPlayer(p, b);
+
+    WallHit wh = _checkWallCollision(p, b);
+    _computeStyle(p, wh);
+    _clampPlayer(p, b, wh);
 }
