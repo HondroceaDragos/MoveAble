@@ -1,5 +1,7 @@
 #include "../../include/core/engine.hpp"
 
+#include <algorithm>
+
 Engine::Engine(const double& dt): _dt(dt) {}
 
 void Engine::_normalizeDirection(Vector2& direction) {
@@ -80,6 +82,10 @@ void Engine::_computeStyle(Player &p, WallHit& wh) {
     p.setStyle(wh.anyHits(), _dt);
 }
 
+const Vector2 Engine::_computeVectorReflection(const Vector2& v, const Vector2& normal) {
+    return v - 2 * (v * normal) * normal;
+}
+
 void Engine::_clampPlayer(Player& p, Buffer& b, WallHit& wh) {
     double dx = p.getPosition().x;
     double dy = p.getPosition().y;
@@ -92,10 +98,17 @@ void Engine::_clampPlayer(Player& p, Buffer& b, WallHit& wh) {
 
     double stylePts = p.getStyle().getPoints();
 
-    if (wh.inspectHit("right")) { dx = bx - pr; mx = -mx * universal::elasticity * stylePts; }
-    if (wh.inspectHit("left"))  { dx = 0 + pr; mx = -mx * universal::elasticity * stylePts;  }
-    if (wh.inspectHit("top"))  { dy = 0 + pr; my = -my * universal::elasticity * stylePts;  }
-    if (wh.inspectHit("bottom")) { dy = by - pr; my = -my * universal::elasticity * stylePts; }
+    auto _bounce = [&](const Vector2& normal) {
+        auto mp = _computeVectorReflection((Vector2){mx, my}, normal);
+        mp *= universal::elasticity * stylePts;
+        mx = mp.x;
+        my = mp.y;
+    };
+
+    if (wh.inspectHit("right"))  { dx = bx - pr; _bounce(wh.getWallNormal("right"));  }
+    if (wh.inspectHit("left"))   { dx =  0 + pr; _bounce(wh.getWallNormal("left"));   }
+    if (wh.inspectHit("top"))    { dy =  0 + pr; _bounce(wh.getWallNormal("top"));    }
+    if (wh.inspectHit("bottom")) { dy = by - pr; _bounce(wh.getWallNormal("bottom")); }
 
     p.setPosition((Vector2){dx, dy});
     p.setMomentum((Vector2){mx, my});

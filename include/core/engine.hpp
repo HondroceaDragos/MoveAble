@@ -3,6 +3,7 @@
 #include "../entities/player.hpp"
 #include "../graphics/buffer.hpp"
 #include "./wallhit.hpp"
+#include "./vectorops.hpp"
 
 #include <cmath>
 
@@ -27,6 +28,8 @@ private:
     void _normalizeMomentum(Vector2& momentum, const double& cap);
 
     WallHit _checkWallCollision(Player& p, Buffer &b);
+    const Vector2 _computeVectorReflection(const Vector2& v, const Vector2& normal);
+    const Vector2 _computeBounce(const Vector2& m, const Vector2& normal);
     void _clampPlayer(Player& p, Buffer& b, WallHit& wh);
     void _computeStyle(Player &p, WallHit& wh);
 
