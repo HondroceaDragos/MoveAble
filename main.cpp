@@ -28,8 +28,8 @@ int main(void) {
         gm.updatePlayer();
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
 
+        gm.drawGameplayBackground();
         gm.drawPlayer(true);
 
         EndDrawing();

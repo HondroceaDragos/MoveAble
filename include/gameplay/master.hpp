@@ -10,7 +10,9 @@ public:
     GameMaster(const Player& player, const Engine& engine, const Renderer& renderer, const Buffer& buffer);
 
     void updatePlayer();
+
     void drawPlayer(const bool& showHitbox);
+    void drawGameplayBackground();
 
     bool active();
 private:

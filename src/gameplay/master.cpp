@@ -12,3 +12,7 @@ void GameMaster::drawPlayer(const bool& showHitbox) {
 }
 
 bool GameMaster::active() { return !WindowShouldClose(); }
+
+void GameMaster::drawGameplayBackground() {
+    _renderer.drawGameplayBackground(_player.getStyle(), _buffer);
+}
