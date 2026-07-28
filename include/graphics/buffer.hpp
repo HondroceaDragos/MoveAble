@@ -14,6 +14,7 @@ class Buffer {
 public:
     Buffer();
     void init(const std::string& name);
+    void deinit();
 
     const std::tuple<int32_t, int32_t> getDimensions() const;
 private:

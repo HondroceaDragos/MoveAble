@@ -13,6 +13,11 @@ void Buffer::init(const std::string &name) {
     _dimensions.height = _monitor.dimensions.height / 2;
 
     SetWindowSize(_dimensions.width, _dimensions.height);
+    SetTargetFPS(GetMonitorRefreshRate(_monitor.id));
 }
 
-const std::tuple<int32_t, int32_t> Buffer::getDimensions() const { return std::make_tuple(_dimensions.width, _dimensions.height); }
+void Buffer::deinit() { CloseWindow(); }
+
+const std::tuple<int32_t, int32_t> Buffer::getDimensions() const {
+    return std::make_tuple(_dimensions.width, _dimensions.height);
+}

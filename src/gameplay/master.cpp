@@ -1,18 +1,33 @@
 #include "../../include/gameplay/master.hpp"
+#include "../../include/gameplay/playstate.hpp"
+#include "../../include/gameplay/pausestate.hpp"
 
 GameMaster::GameMaster(const Player &player, const Engine &engine, const Renderer &renderer, const Buffer& buffer):
-    _player(player), _engine(engine), _renderer(renderer), _shouldRun(false), _buffer(buffer) {}
+    _player(player), _engine(engine), _renderer(renderer), _shouldRun(false), _buffer(buffer) {
+        _states["play"] = std::make_unique<PlayState>();
+        _states["pause"] = std::make_unique<PauseState>();
 
-void GameMaster::updatePlayer() { _engine.updatePlayer(_player, _buffer); }
-
-void GameMaster::drawPlayer(const bool& showHitbox) {
-    _renderer.drawPlayerSprite(_player);
-
-    if (showHitbox) { _renderer.drawPlayerHitbox(_player); }
-}
+        _currState = "play";
+        _states.at(_currState)->onEnter(*this);
+    }
 
 bool GameMaster::active() { return !WindowShouldClose(); }
 
-void GameMaster::drawGameplayBackground() {
-    _renderer.drawGameplayBackground(_player.getStyle(), _buffer);
+Player& GameMaster::getPlayer() { return _player; }
+Engine& GameMaster::getEngine() { return _engine; }
+Renderer& GameMaster::getRenderer() { return _renderer; }
+Buffer& GameMaster::getBuffer() { return _buffer; }
+
+void GameMaster::changeState(const std::string& newState) {
+    _states.at(_currState)->onExit(*this);
+    _currState = newState;
+    _states.at(_currState)->onEnter(*this);
+}
+
+void GameMaster::update() {
+    _states.at(_currState)->update(*this);
+}
+
+void GameMaster::draw() {
+    _states.at(_currState)->draw(*this);
 }

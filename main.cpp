@@ -25,17 +25,10 @@ int main(void) {
     GameMaster gm = GameMaster(player, engine, renderer, buffer);
 
     while (gm.active()) {
-        gm.updatePlayer();
-
-        BeginDrawing();
-
-        gm.drawGameplayBackground();
-        gm.drawPlayer(true);
-
-        EndDrawing();
+        gm.update();
+        gm.draw();
     }
 
-    CloseWindow();
-
+    buffer.deinit();
     return 0;
 }
