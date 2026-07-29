@@ -24,6 +24,10 @@ public:
     const Hitbox& getHitbox() const;
 
     const Sprite& getSprite() const;
+
+    const double& getOrientation() const;
+    void setOrientation(const double& newOrientation);
+    void setSpriteRotation(const double& newRotation);
 protected:
     Vector2 _position;
     Vector2 _velocity;
@@ -31,4 +35,6 @@ protected:
 
     Hitbox _hitbox;
     Sprite _sprite;
+
+    double _orientation;
 };

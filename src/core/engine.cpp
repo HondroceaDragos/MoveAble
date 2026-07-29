@@ -27,21 +27,12 @@ void Engine::_normalizeMomentum(Vector2& momentum, const double& cap) {
     momentum.y = my;
 }
 
-void Engine::_interpretInput(Player& p) {
+void Engine::_movePlayer(Player& p, Vector2& direction) {
     double vx = p.getVelocity().x;
     double vy = p.getVelocity().y;
 
     double mx = p.getMomentum().x;
     double my = p.getMomentum().y;
-
-    Vector2 direction = {0};
-    if (IsKeyDown(KEY_D)) { direction.x += 1.0;  }
-    if (IsKeyDown(KEY_A)) { direction.x += -1.0; }
-    if (IsKeyDown(KEY_W)) { direction.y += -1.0; }
-    if (IsKeyDown(KEY_S)) { direction.y += 1.0;  }
-
-    // if (IsKeyDown(KEY_SPACE)) {
-    // }
 
     _normalizeDirection(direction);
 
@@ -58,6 +49,16 @@ void Engine::_interpretInput(Player& p) {
     my = momentum.y;
 
     p.setMomentum((Vector2){mx, my});
+}
+
+void Engine::_spinPlayer(Player& p, const bool& spinning) {
+    if (!spinning) return;
+
+    double newOrientation = p.getOrientation() + universal::centripetal * _dt;
+    double angle = std::fmod(newOrientation, 360.0);
+
+    p.setOrientation(angle);
+    p.setSpriteRotation(angle);
 }
 
 WallHit Engine::_checkWallCollision(Player& p, Buffer &b) {
@@ -128,9 +129,10 @@ void Engine::_carryMomentum(Player& p) {
     p.setMomentum((Vector2){mx, my});
 }
 
-void Engine::updatePlayer(Player& p, Buffer& b) {
+void Engine::updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& spinning) {
     _dt = GetFrameTime();
-    _interpretInput(p);
+    _movePlayer(p, direction);
+    _spinPlayer(p, spinning);
     _carryMomentum(p);
 
     WallHit wh = _checkWallCollision(p, b);

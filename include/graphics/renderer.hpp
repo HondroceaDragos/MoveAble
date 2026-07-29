@@ -19,6 +19,7 @@ public:
     const Font& getFont(const std::string& where) const;
 
     void drawGameplayBackground(const Style& s, const Buffer& b);
+    void drawFilter(const Buffer& b, const Color color);
 private:
     std::unordered_map<std::string, Font> _fonts;
 };

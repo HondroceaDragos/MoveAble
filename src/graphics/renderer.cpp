@@ -15,13 +15,17 @@ void Renderer::drawPlayerSprite(const Player& p) {
 
     auto [dx, dy] = p.getPosition();
 
-    DrawTextureEx(
-        pt,
-        (Vector2){dx - pt.width * ts / 2, dy - pt.height * ts / 2},
-        tr,
-        ts,
-        RAYWHITE
-    );
+    double width = pt.width;
+    double height = pt.height;
+
+    double scaled_width = width * ts;
+    double scaled_height = height * ts;
+
+    Rectangle src = (Rectangle){0.0, 0.0, width, height};
+    Rectangle dst = (Rectangle){dx, dy, scaled_width, scaled_height};
+    Vector2 origin = {scaled_width / 2.0, scaled_height / 2.0};
+
+    DrawTexturePro(pt, src, dst, origin, tr, RAYWHITE);
 }
 
 void Renderer::drawPlayerHitbox(const Player& p) {
@@ -62,4 +66,9 @@ void Renderer::drawGameplayBackground(const Style& s, const Buffer& b) {
     } else {
         drawGrade("D", (Color){16, 32, 240, 64});
     }
+}
+
+void Renderer::drawFilter(const Buffer& b, const Color color) {
+    auto& [bx, by] = b.getDimensions();
+    DrawRectangle(0, 0, bx, by, color);
 }

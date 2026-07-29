@@ -8,8 +8,11 @@ void PlayState::_updatePlayer(GameMaster& master) {
     auto& _engine = master.getEngine();
     auto& _player = master.getPlayer();
     auto& _buffer = master.getBuffer();
+    auto& _input_interpreter = master.getInputInterpreter();
 
-    _engine.updatePlayer(_player, _buffer);
+    auto direction = _input_interpreter.requestPlayerMovement();
+    auto spinning = _input_interpreter.requestAirTrick();
+    _engine.updatePlayer(_player, _buffer, direction, spinning);
 }
 
 void PlayState::_drawPlayer(GameMaster& master, const bool& showHitbox) {
@@ -33,7 +36,7 @@ void PlayState::onEnter(GameMaster& master) { return; }
 void PlayState::onExit(GameMaster& master) { return; }
 
 void PlayState::_requestPause(GameMaster& master) {
-    if (IsKeyPressed(KEY_P)) { master.changeState("pause"); }
+    if (master.getInputInterpreter().requestPause()) { master.changeState("pause"); }
 }
 
 void PlayState::update(GameMaster& master) {
@@ -44,6 +47,6 @@ void PlayState::update(GameMaster& master) {
 void PlayState::draw(GameMaster& master) {
     BeginDrawing();
     _drawGameplayBackground(master);
-    _drawPlayer(master, true);
+    _drawPlayer(master, false);
     EndDrawing();
 }

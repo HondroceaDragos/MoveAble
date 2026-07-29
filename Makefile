@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = g++
-CFLAGS = -O1 -Wall -std=c++20 -Wno-missing-braces
+CFLAGS = -O3 -Wall -std=c++20 -Wno-missing-braces
 INCLUDES = -I C:/raylib/raylib/src
 LDFLAGS = -L C:/raylib/raylib/src
 LIBS = -lraylib -lopengl32 -lgdi32 -lwinmm

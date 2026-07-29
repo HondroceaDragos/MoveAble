@@ -8,7 +8,10 @@ public:
     Sprite();
 
     const Texture2D& getTexture() const;
+
+    void setRotation(const double& newRotation);
     const double& getRotation() const;
+
     const double& getScale() const;
 private:
     Texture2D _texture;

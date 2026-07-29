@@ -22,3 +22,7 @@ const Vector2 &Entity::getVelocity() const { return _velocity; }
 const Hitbox &Entity::getHitbox() const { return _hitbox; }
 
 const Sprite &Entity::getSprite() const { return _sprite; }
+
+void Entity::setOrientation(const double& newOrientation) { _orientation = newOrientation; }
+void Entity::setSpriteRotation(const double& newRotation) { _sprite.setRotation(newRotation); }
+const double& Entity::getOrientation() const { return _orientation; }

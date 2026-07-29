@@ -21,11 +21,16 @@ void PauseState::_drawGameplayBackground(GameMaster& master) {
     _renderer.drawGameplayBackground(_player.getStyle(), _buffer);
 }
 
+void PauseState::_drawPauseFilter(GameMaster& master) {
+    auto& _buffer = master.getBuffer();
+    master.getRenderer().drawFilter(_buffer, (Color){182, 182, 182, 128});
+}
+
 void PauseState::onEnter(GameMaster& master) { return; }
 void PauseState::onExit(GameMaster& master) { return; }
 
 void PauseState::_requestUnpause(GameMaster& master) {
-    if (IsKeyPressed(KEY_P)) { master.changeState("play"); }
+    if (master.getInputInterpreter().requestPause()) { master.changeState("play"); }
 }
 
 void PauseState::update(GameMaster& master) {
@@ -33,12 +38,9 @@ void PauseState::update(GameMaster& master) {
 }
 
 void PauseState::draw(GameMaster& master) {
-        auto& _buffer = master.getBuffer();
-
-    auto& [bx, by] = _buffer.getDimensions();
     BeginDrawing();
     _drawGameplayBackground(master);
     _drawPlayer(master, true);
-    DrawRectangle(0, 0, bx, by, (Color){0, 240, 15, 64});
+    _drawPauseFilter(master);
     EndDrawing();
 }

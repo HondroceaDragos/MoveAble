@@ -13,6 +13,7 @@ public:
 private:
     void _drawPlayer(GameMaster& master, const bool& showHitbox);
     void _drawGameplayBackground(GameMaster& master);
+    void _drawPauseFilter(GameMaster& master);
 
     void _requestUnpause(GameMaster& master);
 };

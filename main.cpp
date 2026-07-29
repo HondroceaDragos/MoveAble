@@ -21,8 +21,9 @@ int main(void) {
 
     Engine engine = Engine(0.0);
     Renderer renderer = Renderer();
+    InputInterpreter input_interpreter = InputInterpreter();
 
-    GameMaster gm = GameMaster(player, engine, renderer, buffer);
+    GameMaster gm = GameMaster(player, engine, renderer, buffer, input_interpreter);
 
     while (gm.active()) {
         gm.update();

@@ -13,6 +13,8 @@ Player::Player(const Vector2& position, const Hitbox& hitbox,
 
         this->_style = Style();
         this->_timeSinceWallHit = 0.0;
+
+        this->_orientation = 0.0;
     }
 
 void Player::setStyle(const bool& condition, const double& dt) {
