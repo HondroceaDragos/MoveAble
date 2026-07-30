@@ -19,9 +19,11 @@ void PlayState::_drawPlayer(GameMaster& master, const bool& showHitbox) {
     auto& _renderer = master.getRenderer();
     auto& _player = master.getPlayer();
 
+    _renderer.drawPlayerTrail(_player);
     _renderer.drawPlayerSprite(_player);
 
     if (showHitbox) { _renderer.drawPlayerHitbox(_player); }
+
 }
 
 void PlayState::_drawGameplayBackground(GameMaster& master) {

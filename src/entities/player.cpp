@@ -15,6 +15,7 @@ Player::Player(const Vector2& position, const Hitbox& hitbox,
         this->_timeSinceWallHit = 0.0;
 
         this->_orientation = 0.0;
+        this->_position_history = RingBuffer<Vector2>(40);
     }
 
 void Player::setStyle(const bool& condition, const double& dt) {
@@ -30,3 +31,6 @@ void Player::setStyle(const bool& condition, const double& dt) {
 const Style& Player::getStyle() const {
     return _style;
 }
+
+void Player::logNewPosition() { _position_history.record(_position); }
+const RingBuffer<Vector2>& Player::getPositionHistory() const { return _position_history; }

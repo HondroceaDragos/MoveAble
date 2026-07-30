@@ -116,9 +116,11 @@ void Engine::_clampPlayer(Player& p, Buffer& b, WallHit& wh) {
 }
 
 void Engine::_carryMomentum(Player& p) {
+    Vector2 position = p.getPosition();
     auto [dx, dy] = p.getPosition();
     auto [mx, my] = p.getMomentum();
     p.setPosition((Vector2){dx + mx * _dt, dy + my * _dt});
+    p.logNewPosition();
 
     if (mx > 0.0) { mx = std::fmax(0.0, mx - universal::friction * _dt);
     } else if (mx < 0.0) { mx = fmin(0.0, mx + universal::friction * _dt); }
@@ -127,6 +129,7 @@ void Engine::_carryMomentum(Player& p) {
     } else if (my < 0.0) { my = fmin(0.0, my + universal::friction * _dt); }
 
     p.setMomentum((Vector2){mx, my});
+
 }
 
 void Engine::updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& spinning) {

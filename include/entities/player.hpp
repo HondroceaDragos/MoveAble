@@ -2,6 +2,9 @@
 
 #include "./entity.hpp"
 #include "./style.hpp"
+#include "../physics/ringbuffer.hpp"
+
+#include <queue>
 
 class Player: public Entity {
 public:
@@ -13,7 +16,11 @@ public:
 
     void setStyle(const bool& condition, const double& dt);
     const Style& getStyle() const;
+
+    void logNewPosition();
+    const RingBuffer<Vector2>& getPositionHistory() const;
 private:
     Style _style;
     double _timeSinceWallHit;
+    RingBuffer<Vector2> _position_history;
 };

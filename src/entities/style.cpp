@@ -15,3 +15,9 @@ void Style::decreasePoints(const bool& condition) {
 const double& Style::getPoints() const {
     return _points;
 }
+
+const std::string Style::getGrade() const {
+    if (_points >= threshold::grade_s) return "S";
+    if (_points >= threshold::grade_a) return "A";
+    return "D";
+}
