@@ -2,7 +2,9 @@
 
 #include <algorithm>
 
-Engine::Engine(const double& dt): _dt(dt) {}
+Engine::Engine(const double& dt): _dt(dt) {
+    _bounce_angle = Randomizer(-3.5, 3.5);
+}
 
 void Engine::_normalizeDirection(Vector2& direction) {
     auto [dx, dy] = direction;
@@ -75,16 +77,35 @@ WallHit Engine::_checkWallCollision(Player& p, Buffer &b) {
     wh.registerHit("left", !(dx - pr >= 0));
     wh.registerHit("top", !(dy - pr >= 0));
     wh.registerHit("bottom", !(dy + pr <= by));
+
+    wh.setBounceAngle(_bounce_angle.getValue());
     
     return wh;
 }
 
 void Engine::_computeStyle(Player &p, WallHit& wh) {
-    p.setStyle(wh.anyHits(), _dt);
+    Style ps = p.getStyle();
+
+    if (wh.anyHits()) {
+        p.setTimeSinceWallHit(0.0);
+        ps.increasePoints(true);
+    } else {
+        double elapsed = p.getTimeSinceWallHit() + _dt;
+        p.setTimeSinceWallHit(elapsed);
+        ps.decreasePoints(elapsed >= points::decay_delay);
+    }
+
+    p.setStyle(ps);
 }
 
-const Vector2 Engine::_computeVectorReflection(const Vector2& v, const Vector2& normal) {
+Vector2 Engine::_computeVectorReflection(const Vector2& v, const Vector2& normal) const {
     return v - 2 * (v * normal) * normal;
+}
+
+Vector2 Engine::_rotateVector(const Vector2& v, double angle) const {
+    auto _degree_to_rad = [&]() { return angle * PI / 180; };
+    angle = _degree_to_rad();
+    return (Vector2){v.x * cos(angle) - v.y * sin(angle), v.x * sin(angle) + v.y * cos(angle)};
 }
 
 void Engine::_clampPlayer(Player& p, Buffer& b, WallHit& wh) {
@@ -100,8 +121,9 @@ void Engine::_clampPlayer(Player& p, Buffer& b, WallHit& wh) {
     double stylePts = p.getStyle().getPoints();
 
     auto _bounce = [&](const Vector2& normal) {
-        auto mp = _computeVectorReflection((Vector2){mx, my}, normal);
-        mp *= universal::elasticity * stylePts;
+        auto rnormal = _rotateVector(normal, wh.getBounceAngle());
+        Vector2 mp = _computeVectorReflection((Vector2){mx, my}, rnormal);
+        mp *= universal::elasticity * std::min(stylePts, points::per_wall);
         mx = mp.x;
         my = mp.y;
     };

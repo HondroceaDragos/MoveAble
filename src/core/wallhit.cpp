@@ -1,6 +1,8 @@
 #include "../../include/core/wallhit.hpp"
 
-WallHit::WallHit() {
+#include <iostream>
+
+WallHit::WallHit(): _bounce_angle(0.0) {
     _normals = {
         {"left", (Vector2){1.0, 0.0}},
         {"right", (Vector2){-1.0, 0.0}},
@@ -32,3 +34,6 @@ bool WallHit::anyHits() const {
 const Vector2& WallHit::getWallNormal(const std::string& side) const {
     return _normals.at(side);
 }
+
+void WallHit::setBounceAngle(double newAngle) { _bounce_angle = newAngle; }
+const double& WallHit::getBounceAngle() const { return _bounce_angle; }

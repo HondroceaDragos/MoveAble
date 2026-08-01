@@ -18,19 +18,11 @@ Player::Player(const Vector2& position, const Hitbox& hitbox,
         this->_position_history = RingBuffer<Vector2>(40);
     }
 
-void Player::setStyle(const bool& condition, const double& dt) {
-    if (condition) {
-        _timeSinceWallHit = 0.0;
-        _style.increasePoints(condition);
-    } else {
-        _timeSinceWallHit += dt;
-        _style.decreasePoints(_timeSinceWallHit >= points::decay_delay);
-    }
-}
+void Player::setStyle(const Style& newStyle) { _style = newStyle; }
+const Style& Player::getStyle() const { return _style; }
 
-const Style& Player::getStyle() const {
-    return _style;
-}
+void Player::setTimeSinceWallHit(double t) { _timeSinceWallHit = t; }
+const double& Player::getTimeSinceWallHit() const { return _timeSinceWallHit; }
 
 void Player::logNewPosition() { _position_history.record(_position); }
 const RingBuffer<Vector2>& Player::getPositionHistory() const { return _position_history; }

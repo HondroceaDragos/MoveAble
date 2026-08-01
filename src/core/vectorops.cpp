@@ -21,5 +21,7 @@ Vector2 operator*(const double& scalar, const Vector2& a) {
 }
 
 Vector2 operator*=(Vector2& a, const double& scalar) {
-    return a * scalar;
+    a.x *= scalar;
+    a.y *= scalar;
+    return a;
 }

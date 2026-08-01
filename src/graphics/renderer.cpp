@@ -47,19 +47,19 @@ void Renderer::drawPlayerTrail(const Player& p) {
     Sprite ps = p.getSprite();
 
     size_t trail_count = 0;
-    if (grade == "S") trail_count = 19;
-    if (grade == "A") trail_count = 17;
+    if (grade == "S") trail_count = 7;
+    if (grade == "A") trail_count = 5;
 
     auto [dx, dy] = p.getPosition();
     auto [mx, my] = p.getMomentum();
 
     for (size_t copy = 1; copy <= trail_count; copy++) {
-        double offset = 0.8 * copy;
+        double offset = 1.25 * copy;
 
         Vector2 copyPosition = position_history.at(offset);
-        int32_t copyAlpha = static_cast<int32_t>(255 / (copy * 0.8));
+        int32_t copyAlpha = static_cast<int32_t>(255 / (copy * 0.85));
 
-        _drawEntitySprite(ps, copyPosition, ps.getScale() * 0.875, (Color){230, 230, 230, copyAlpha});
+        _drawEntitySprite(ps, copyPosition, ps.getScale() * 0.75, (Color){230, 230, 230, copyAlpha});
     }
 }
 

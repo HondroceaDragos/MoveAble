@@ -6,8 +6,8 @@
 namespace points {
     constexpr double base = 1.0;
     constexpr double per_wall = 4.25;
-    constexpr double decay_rate = 1.25;
-    constexpr double decay_delay = 1.5;
+    constexpr double decay_rate = 1.0;
+    constexpr double decay_delay = 1.15;
 }
 
 namespace threshold {

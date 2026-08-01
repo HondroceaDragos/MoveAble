@@ -14,8 +14,11 @@ public:
         const Sprite& sprite
     );
 
-    void setStyle(const bool& condition, const double& dt);
+    void setStyle(const Style& newStyle);
     const Style& getStyle() const;
+
+    void setTimeSinceWallHit(double t);
+    const double& getTimeSinceWallHit() const;
 
     void logNewPosition();
     const RingBuffer<Vector2>& getPositionHistory() const;
