@@ -1,5 +1,7 @@
 # MoveAble
 
+[![Try out the demo](https://img.shields.io/badge/Try%20out%20the-demo-blue)](https://github.com/HondroceaDragos/MoveAble/releases/tag/v0.0.1)
+
 **A small C++20 game engine built using [Raylib](https://www.raylib.com/), focused on arcade-style movement mechanics: an egg that bounces off the walls, builds momentum, and gets more stylish the more it hits.**
 
 > Windows only. The build is configured for MinGW-w64 and the Win32 / OpenGL system libraries.
