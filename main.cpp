@@ -16,7 +16,7 @@ int main(void) {
         (CircleHitbox){.center = (Vector2){bufferWidth / 2.0, bufferHeight / 2.0}, .radius = player_data / 32.0},
         (Vector2){player_data / 2.7, player_data / 2.7},
         (Vector2){0.0, 0.0},
-        Sprite(LoadTexture("sprite.png"), 0.0, player_data / 256.0 * 0.04)
+        Sprite(LoadTexture("egg.png"), 0.0, player_data / 256.0 * 0.02)
     );
 
     Engine engine = Engine(0.0);

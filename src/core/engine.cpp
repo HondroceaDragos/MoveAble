@@ -154,7 +154,7 @@ void Engine::_carryMomentum(Player& p) {
 
 }
 
-void Engine::updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& spinning) {
+WallHit Engine::updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& spinning) {
     _dt = GetFrameTime();
     _movePlayer(p, direction);
     _spinPlayer(p, spinning);
@@ -163,4 +163,24 @@ void Engine::updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& 
     WallHit wh = _checkWallCollision(p, b);
     _computeStyle(p, wh);
     _clampPlayer(p, b, wh);
+
+    return wh;
+}
+
+void Engine::updateParticle(Particle& p) {
+    double plt = p.getLifetime();
+
+    if (plt <= 0.0) return;
+    p.setLifetime(plt - _dt);
+
+    plt = p.getLifetime();
+    if (plt > 0.0) {
+        auto [dx, dy] = p.getPosition();
+        auto [vx, vy] = p.getVelocity();
+
+        dx += vx * _dt;
+        dy += vy * _dt;
+
+        p.setPosition((Vector2){dx, dy});
+    }
 }

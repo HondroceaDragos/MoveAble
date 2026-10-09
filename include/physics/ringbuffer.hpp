@@ -33,6 +33,13 @@ public:
         idx = _head + _capacity - idx - 1;
         return _data[(idx) % _capacity];
     }
+
+    T& at(const size_t& frame) {
+        size_t idx = frame;
+        if (frame >= _size) idx = (_size > 0) ? (_size - 1) : 0;
+        idx = _head + _capacity - idx - 1;
+        return _data[(idx) % _capacity];
+    }
 private:
     std::vector<T> _data;
 

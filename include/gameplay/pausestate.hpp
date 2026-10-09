@@ -15,5 +15,7 @@ private:
     void _drawGameplayBackground(GameMaster& master);
     void _drawPauseFilter(GameMaster& master);
 
+    void _drawParticles(GameMaster &master);
+
     void _requestUnpause(GameMaster& master);
 };

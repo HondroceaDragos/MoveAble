@@ -37,6 +37,25 @@ void Renderer::drawPlayerHitbox(const Player& p) {
     DrawCircle(dx, dy, pr, (Color){255, 0, 0, 128});
 }
 
+void Renderer::drawParticleSprite(const Particle& p) {
+    Sprite ps = p.getSprite();
+
+    double alpha = 255.0 * (p.getLifetime() / p.getMaxlife());
+    Color fadedWhite = RAYWHITE;
+    fadedWhite.a = static_cast<unsigned char>(alpha);
+
+    _drawEntitySprite(ps, p.getPosition(), ps.getScale(), fadedWhite);
+}
+
+void Renderer::drawParticleHitbox(const Particle& p) {
+    auto [dx, dy] = p.getPosition();
+    double pr = std::get<CircleHitbox>(p.getHitbox()).radius;
+
+    double alpha = 255.0 * (p.getLifetime() / p.getMaxlife());
+
+    DrawCircle(dx, dy, pr, (Color){255, 0, 0, static_cast<unsigned char>(alpha)});
+}
+
 void Renderer::drawPlayerTrail(const Player& p) {
     auto grade = p.getStyle().getGrade();
     if (grade == "D") return;

@@ -26,6 +26,19 @@ void PauseState::_drawPauseFilter(GameMaster& master) {
     master.getRenderer().drawFilter(_buffer, (Color){182, 182, 182, 128});
 }
 
+void PauseState::_drawParticles(GameMaster &master) {
+    auto& pe = master.getParticleEngine();
+    auto& r = master.getRenderer();
+
+    for (size_t idx = 0; idx < pe.size(); idx++) {
+        const auto& p = pe.at(idx);
+        if (p.getLifetime() > 0.0) {
+            r.drawParticleHitbox(p);
+            r.drawParticleSprite(p);
+        }
+    }
+}
+
 void PauseState::onEnter(GameMaster& master) { return; }
 void PauseState::onExit(GameMaster& master) { return; }
 
@@ -41,6 +54,7 @@ void PauseState::draw(GameMaster& master) {
     BeginDrawing();
     _drawGameplayBackground(master);
     _drawPlayer(master, true);
+    _drawParticles(master);
     _drawPauseFilter(master);
     EndDrawing();
 }

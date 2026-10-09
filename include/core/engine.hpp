@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../entities/player.hpp"
+#include "../entities/particle.hpp"
+
 #include "../graphics/buffer.hpp"
 #include "./wallhit.hpp"
 #include "./vectorops.hpp"
@@ -21,7 +23,8 @@ class Engine {
 public:
     Engine(const double& _dt);
 
-    void updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& spinning);
+    WallHit updatePlayer(Player& p, Buffer& b, Vector2& direction, const bool& spinning);
+    void updateParticle(Particle& p);
 private:
     double _dt;
     Randomizer _bounce_angle;

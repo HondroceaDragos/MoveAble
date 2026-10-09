@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../core/engine.hpp"
+#include "../core/wallhit.hpp"
 #include "../core/inputinterpreter.hpp"
 #include "../entities/player.hpp"
+#include "../entities/particle.hpp"
 #include "../graphics/renderer.hpp"
 #include "../graphics/buffer.hpp"
 
@@ -26,6 +28,8 @@ public:
     Buffer& getBuffer();
     InputInterpreter& getInputInterpreter();
 
+    RingBuffer<Particle>& getParticleEngine();
+
     bool active();
     void changeState(const std::string& newState);
 private:
@@ -39,4 +43,6 @@ private:
 
     std::string _currState;
     std::unordered_map<std::string, std::unique_ptr<GameState>> _states;
+
+    RingBuffer<Particle> _particleEngine;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../entities/player.hpp"
+#include "../entities/particle.hpp"
 
 #include <unordered_map>
 #include <string>
@@ -25,6 +26,9 @@ public:
 
     void drawGameplayBackground(const Style& s, const Buffer& b);
     void drawFilter(const Buffer& b, const Color color);
+
+    void drawParticleSprite(const Particle& p);
+    void drawParticleHitbox(const Particle& p);
 private:
     std::unordered_map<std::string, Font> _fonts;
     void _drawEntitySprite(const Sprite& sprite, const Vector2& position, const double& scale, const Color& tint);
